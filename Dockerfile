@@ -1,26 +1,24 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+# Create user with UID 1000 (Required for Hugging Face Spaces)
+RUN useradd -m -u 1000 user
+USER user
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR $HOME/app
 
-# Install python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install python dependencies as user
+COPY --chown=user requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
 
 # Copy application files
-COPY . .
+COPY --chown=user . $HOME/app
 
-# Expose standard port
-EXPOSE 8000
-
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
+# Hugging Face Spaces requires port 7860
+EXPOSE 7860
+ENV PORT=7860
 ENV HOST=0.0.0.0
-ENV PORT=8000
 
-# Run FastAPI with uvicorn
-CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Run FastAPI with uvicorn (compatible with both HF Spaces 7860 and cloud dynamic $PORT)
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-7860}"]
