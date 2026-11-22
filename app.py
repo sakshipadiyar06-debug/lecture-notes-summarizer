@@ -208,5 +208,7 @@ async def summarize_file_endpoint(
 
 if __name__ == "__main__":
     import uvicorn
-    print("\n\033[38;2;252;147;31mStarting Automatic Lecture Notes Summarizer Server on http://127.0.0.1:8000...\033[0m\n")
-    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", 8000))
+    print(f"\n\033[38;2;252;147;31mStarting Automatic Lecture Notes Summarizer Server on http://{host}:{port}...\033[0m\n")
+    uvicorn.run("app:app", host=host, port=port, reload=False)
