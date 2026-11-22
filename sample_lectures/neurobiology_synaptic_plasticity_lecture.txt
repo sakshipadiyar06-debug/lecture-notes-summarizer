@@ -1,0 +1,45 @@
+NEURO 301: Cellular and Molecular Neurobiology
+Lecture 8: Synaptic Plasticity, Long-Term Potentiation (LTP), and the Molecular Basis of Memory
+Instructor: Dr. Maya Lin, Department of Brain and Cognitive Sciences
+
+[00:00:10] Dr. Lin: Welcome, class. Today we explore one of the holy grails of modern neuroscience: How does physical tissue store an abstract thought, an experience, or a memory? The answer begins in 1949 with Canadian psychologist Donald Hebb and his famous postulate: "When an axon of cell A is near enough to excite cell B and repeatedly takes part in firing it, some growth process or metabolic change takes place in one or both cells such that A's efficiency, as one of the cells firing B, is increased." Often summarized in modern colloquial terms as: "Neurons that fire together, wire together."
+
+[00:03:20] Dr. Lin: In 1973, Terje Lømo and Timothy Bliss experimentally proved Hebb's postulate in the mammalian hippocampus, specifically at the perforant path synapses onto granule cells of the dentate gyrus. They termed this phenomenon Long-Term Potentiation, or LTP.
+
+LTP is defined as a persistent, activity-dependent increase in synaptic strength following high-frequency stimulation (a tetanus). Today, we will examine the classic tripartite model of LTP in the CA1 pyramidal neurons of the hippocampus, which receive excitatory Schaffer collateral inputs from CA3 neurons.
+
+[00:06:45] Dr. Lin: At the resting post-synaptic membrane of a CA1 dendritic spine, we have two primary types of ionotropic glutamate receptors:
+1. AMPA receptors (alpha-amino-3-hydroxy-5-methyl-4-isoxazolepropionic acid)
+2. NMDA receptors (N-methyl-D-aspartate)
+
+Under basal low-frequency synaptic transmission, action potentials in the CA3 presynaptic terminal release glutamate across the synaptic cleft (approximately 20 nanometers wide). Glutamate binds to both AMPA and NMDA receptors. AMPA receptor channels open rapidly, allowing sodium ions (Na+) to flow inward, generating a modest excitatory postsynaptic potential, or EPSP.
+
+[00:10:15] Dr. Lin: Now here is the key question: Why don't NMDA receptors conduct ions during basal transmission, even though glutamate is bound to them? Who can explain this critical molecular mechanism?
+
+[00:11:00] Student (David): Because at resting membrane potential (roughly -70 millivolts), extracellular Magnesium ions (Mg2+) are strongly attracted into the channel pore and physically plug it.
+
+[00:11:20] Dr. Lin: Excellent, David! The Magnesium plug! The NMDA receptor acts as a biological coincidence detector. It requires two independent conditions to occur simultaneously:
+First, chemical: Presynaptic glutamate release to bind to the receptor.
+Second, electrical: Postsynaptic depolarization (above approximately -30 mV) to electrostatically repel the positively charged Mg2+ ion out of the channel pore.
+
+When high-frequency stimulation occurs—say, 100 Hertz for one second—rapid summation of AMPA-mediated EPSPs depolarizes the postsynaptic membrane. The Mg2+ block is expelled! NMDA channels open, and because of their high permeability to Calcium ions (Ca2+), a massive surge of Ca2+ floods into the dendritic spine cytoplasm.
+
+[00:16:00] Dr. Lin: This localized Calcium spike is the master trigger. Ca2+ binds to calmodulin, forming a complex that activates CaMKII (Calcium/calmodulin-dependent protein kinase II). CaMKII undergoes autophosphorylation at Threonine-286, which keeps the kinase constitutively active even after intracellular Calcium concentrations drop back to baseline! This is a molecular memory device.
+
+What does activated CaMKII do?
+1. It directly phosphorylates existing AMPA receptors at Serine-831, increasing their single-channel ionic conductance.
+2. It orchestrates the exocytosis and insertion of reserve AMPA receptors from intracellular endosomes into the postsynaptic density (PSD).
+
+With more AMPA receptors clustered at the synapse, subsequent glutamate releases produce a much larger EPSP. The synapse is strengthened! This represents Early-LTP (E-LTP), which lasts for 1 to 3 hours and does not require new protein synthesis.
+
+[00:21:40] Dr. Lin: But what about memories that endure for days, months, or a lifetime? That requires Late-LTP (L-LTP).
+Late-LTP requires de novo gene transcription and mRNA translation. Repeated trains of stimuli lead to persistent elevation of intracellular cAMP, which activates Protein Kinase A (PKA). PKA translocates to the cell nucleus and phosphorylates CREB (cAMP response element-binding protein).
+
+Phosphorylated CREB recruits CREB-binding protein (CBP), triggering transcription of immediate early genes (like c-Fos and Zif268) and structural proteins such as actin, tubulin, and neurotrophins like BDNF (Brain-Derived Neurotrophic Factor). These new proteins remodel the spine architecture, enlarging the postsynaptic density, growing new dendritic spines, and stabilizing synaptic connections permanently.
+
+[00:26:50] Dr. Lin: In summary, remember the three core phases:
+1. Induction: NMDA coincidence detection and Calcium influx.
+2. Expression: CaMKII autophosphorylation, AMPA receptor phosphorylation, and AMPA receptor insertion (E-LTP).
+3. Maintenance & Consolidation: PKA/CREB pathway, gene transcription, and structural spine remodeling (L-LTP).
+
+For next class, please read chapter 12 in Kandel on Long-Term Depression (LTD) and synaptic scaling. Have a wonderful weekend!

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automatic Lecture Notes Summarizer | Generative AI</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-title">
+          <h1>Lecture<span>AI</span></h1>
+          <div class="brand-subtitle">Automatic Lecture Notes & Document Summarizer</div>
+        </div>
+      </div>
+
+      <div class="header-badges">
+        <!-- Exact Color Palette Indicator -->
+        <div class="palette-pill" title="Custom Brand Theme Palette">
+          <div class="color-dot" style="background:#FC931F;" title="#FC931F Warm Amber"></div>
+          <div class="color-dot" style="background:#F67608;" title="#F67608 Vibrant Orange"></div>
+          <div class="color-dot" style="background:#020C0F;" title="#020C0F Obsidian Base"></div>
+          <div class="color-dot" style="background:#053A41;" title="#053A41 Deep Teal Surface"></div>
+          <div class="color-dot" style="background:#044F58;" title="#044F58 Border Teal"></div>
+          <div class="color-dot" style="background:#1C7C84;" title="#1C7C84 Muted Cyan"></div>
+          <div class="color-dot" style="background:#2A9DA6;" title="#2A9DA6 Bright Cyan Accent"></div>
+        </div>
+
+        <div class="engine-status-badge">
+          <span class="status-indicator"></span>
+          <span>Map-Reduce Pipeline Active</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Grid -->
+  <main class="main-content">
+    
+    <!-- Left Column: Controls & Input -->
+    <aside class="control-panel">
+      
+      <!-- Input Card -->
+      <section class="card">
+        <div class="card-title">
+          <span><span class="icon">📝</span> Lecture Input</span>
+          <span style="font-size: 0.75rem; color: var(--color-bright-cyan);">Long Document Ready</span>
+        </div>
+
+        <!-- Mode Tabs: Text vs File Upload -->
+        <div class="tab-group">
+          <button id="tabBtnText" class="tab-btn active">
+            <span>✍️</span> Paste Transcript
+          </button>
+          <button id="tabBtnFile" class="tab-btn">
+            <span>📁</span> Upload PDF / File
+          </button>
+        </div>
+
+        <!-- Text Input Mode -->
+        <div id="textInputPane">
+          <div class="sample-pills">
+            <span>Quick Samples:</span>
+            <button id="btnSampleML" class="pill-btn">🤖 ML Transformers</button>
+            <button id="btnSampleNeuro" class="pill-btn">🧠 Synaptic Plasticity</button>
+          </div>
+
+          <div class="textarea-wrapper">
+            <textarea id="lectureTextInput" placeholder="Paste your university lecture transcript, seminar notes, or textbook chapter here..."></textarea>
+            <div class="input-counters">
+              <span id="wordCount">0 words</span>
+              <span id="charCount">0 chars</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- File Upload Mode -->
+        <div id="fileInputPane" style="display: none;">
+          <input type="file" id="fileInput" accept=".pdf,.txt,.md" style="display: none;">
+          <div id="fileDropzone" class="dropzone">
+            <div class="dropzone-icon">📄</div>
+            <div class="dropzone-text">
+              <strong>Drag & Drop your lecture file here</strong>
+              <div class="dropzone-sub">Supports PDF, TXT, and Markdown documents</div>
+            </div>
+          </div>
+
+          <!-- File Selected Display -->
+          <div id="fileSelectedCard" class="file-selected-card" style="display: none;">
+            <div class="file-info">
+              <span class="icon">📑</span>
+              <div>
+                <div id="selectedFileName" class="file-name">document.pdf</div>
+                <div id="selectedFileSize" class="file-size">1.2 MB</div>
+              </div>
+            </div>
+            <button id="removeFileBtn" class="remove-file-btn" title="Remove file">✕</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LLM & Pipeline Settings Card -->
+      <section class="card">
+        <div class="card-title">
+          <span><span class="icon">⚙️</span> Engine Settings</span>
+        </div>
+
+        <!-- Provider Select -->
+        <div class="form-group">
+          <label class="form-label" for="providerSelect">LLM Provider</label>
+          <select id="providerSelect" class="form-control">
+            <option value="offline" selected>Offline Engine (Zero-Setup / Local NLP)</option>
+            <option value="gemini">Google Gemini (Gemini 2.5 Flash / Pro)</option>
+            <option value="openai">OpenAI (GPT-4o / GPT-4o-mini)</option>
+            <option value="ollama">Ollama (Local Open-Source LLMs)</option>
+          </select>
+        </div>
+
+        <!-- Model Select -->
+        <div class="form-group">
+          <label class="form-label" for="modelSelect">Target Model</label>
+          <select id="modelSelect" class="form-control">
+            <!-- Populated dynamically via JS -->
+          </select>
+        </div>
+
+        <!-- API Key Input (conditional) -->
+        <div id="apiKeyGroup" class="form-group" style="display: none;">
+          <label class="form-label" for="apiKeyInput">API Key (Optional if set in environment)</label>
+          <input type="password" id="apiKeyInput" class="form-control" placeholder="sk-... or AIzaSy...">
+        </div>
+
+        <!-- Ollama Base URL (conditional) -->
+        <div id="ollamaUrlGroup" class="form-group" style="display: none;">
+          <label class="form-label" for="ollamaUrlInput">Ollama Endpoint</label>
+          <input type="text" id="ollamaUrlInput" class="form-control" value="http://localhost:11434">
+        </div>
+
+        <!-- Chunker Configurations -->
+        <div class="form-group" style="margin-top: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+            <label class="form-label" style="margin: 0;">Chunk Window Size</label>
+            <span id="chunkSizeVal" class="slider-val">3200 ch</span>
+          </div>
+          <div class="slider-wrapper">
+            <input type="range" id="chunkSizeSlider" min="1000" max="8000" step="200" value="3200">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+            <label class="form-label" style="margin: 0;">Chunk Context Overlap</label>
+            <span id="chunkOverlapVal" class="slider-val">350 ch</span>
+          </div>
+          <div class="slider-wrapper">
+            <input type="range" id="chunkOverlapSlider" min="50" max="1000" step="50" value="350">
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button id="btnGenerate" class="btn-primary" style="margin-top: 1rem;">
+          <span>✨</span> Generate Lecture Notes
+        </button>
+      </section>
+
+    </aside>
+
+    <!-- Right Column: Results & Interactive Views -->
+    <section class="results-panel">
+
+      <!-- Real-Time Progress Card -->
+      <div id="progressCard" class="progress-card">
+        <div class="progress-header">
+          <span id="progressStep">Starting Map-Reduce pipeline...</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progressBarFill" class="progress-bar-fill"></div>
+        </div>
+      </div>
+
+      <!-- Execution Stats Metrics Grid -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div id="metricWords" class="metric-val">0</div>
+          <div class="metric-label">Input Words</div>
+        </div>
+        <div class="metric-card">
+          <div id="metricChunks" class="metric-val">0</div>
+          <div class="metric-label">Chunks Processed</div>
+        </div>
+        <div class="metric-card">
+          <div id="metricTime" class="metric-val">0.0s</div>
+          <div class="metric-label">Execution Time</div>
+        </div>
+        <div class="metric-card">
+          <div id="metricRatio" class="metric-val">0%</div>
+          <div class="metric-label">Compression</div>
+        </div>
+      </div>
+
+      <!-- Output View Card -->
+      <div class="card" style="flex: 1; display: flex; flex-direction: column;">
+        
+        <!-- Output Navigation & Toolbar -->
+        <div class="output-tab-bar">
+          <div class="output-tabs">
+            <button class="output-tab active" data-target="tabMaster">
+              🎓 Master Notes
+            </button>
+            <button class="output-tab" data-target="tabChunks">
+              🧩 Map Stage (Chunks)
+            </button>
+            <button class="output-tab" data-target="tabRaw">
+              📄 Extracted Text
+            </button>
+          </div>
+
+          <div class="toolbar-actions">
+            <button id="btnCopyMarkdown" class="btn-tool" title="Copy Markdown to Clipboard">
+              📋 Copy Markdown
+            </button>
+            <button id="btnDownloadMd" class="btn-tool" title="Download .md file">
+              💾 Save .md
+            </button>
+            <button id="btnPrintNotes" class="btn-tool" title="Print or Save as PDF">
+              🖨️ Print
+            </button>
+          </div>
+        </div>
+
+        <!-- Output Views Container -->
+        <div class="notes-container">
+          
+          <!-- Master Notes Pane -->
+          <div id="paneMasterNotes">
+            <div id="masterNotesBody">
+              <div class="empty-state">
+                <div class="empty-state-icon">📚</div>
+                <h3>No Lecture Notes Generated Yet</h3>
+                <p>Paste a lecture transcript or upload a PDF document on the left, then click <strong>Generate Lecture Notes</strong> to produce structured study notes.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Intermediate Chunks (Map Stage) Pane -->
+          <div id="paneChunks" style="display: none;">
+            <div id="chunksAccordion" class="chunks-list">
+              <div class="empty-state">
+                <div class="empty-state-icon">🧩</div>
+                <h3>Intermediate Chunks Will Appear Here</h3>
+                <p>During the Map stage, long lectures are split into overlapping semantic segments. Each segment's individual summary can be inspected here.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Raw Extracted Text Pane -->
+          <div id="paneRawText" style="display: none;">
+            <pre id="rawExtractedText" style="font-family: var(--font-mono); font-size: 0.82rem; color: #A0C4C7; white-space: pre-wrap; word-break: break-word;">(Raw text will appear here once loaded or extracted from PDF)</pre>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer>
+    <p>Automatic Lecture Notes Summarizer &bull; Powered by Map-Reduce Chunking &amp; Generative AI &bull; Styled with Color Palette <code>#FC931F</code> <code>#F67608</code> <code>#020C0F</code> <code>#053A41</code> <code>#044F58</code> <code>#1C7C84</code> <code>#2A9DA6</code></p>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

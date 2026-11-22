@@ -1,0 +1,64 @@
+CS 229: Advanced Deep Learning & Natural Language Processing
+Lecture 14: The Transformer Architecture and Self-Attention Mechanisms
+Instructor: Prof. Andrew Evans
+Guest Lecturer: Dr. Elena Rostova
+
+[00:00:15] Prof. Evans: Good morning everyone. Welcome back to CS 229. Today is one of the pivotal lectures of this entire course. We are going to dissect the Transformer architecture, originally introduced by Vaswani et al. in their seminal 2017 paper, "Attention Is All You Need." 
+
+Before we jump into queries, keys, and values, let's step back and remember why the deep learning community desperately needed a replacement for Recurrent Neural Networks (RNNs) and Long Short-Term Memory networks (LSTMs).
+
+[00:02:40] Prof. Evans: Throughout the 2010s, if you were processing sequential data like natural language, audio, or time series, your default architecture was an RNN or an LSTM. What was the core operational principle of an RNN? It processes tokens sequentially, one by one. You compute the hidden state h_t as a function of the previous hidden state h_{t-1} and the current input token x_t: h_t = tanh(W_h * h_{t-1} + W_x * x_t). 
+
+Now, can anyone tell me the fatal computational flaw in that sequential formulation? Yes, Marcus in the third row?
+
+[00:04:12] Student (Marcus): Sequential dependency prevents parallelization across time steps during training. You cannot compute h_{100} until you have finished computing h_1 through h_{99}.
+
+[00:04:25] Prof. Evans: Exactly right. Thank you, Marcus. That is the fundamental bottleneck: O(N) sequential operations. In the era of modern GPUs with tens of thousands of Tensor Cores, you want massive matrix-matrix multiplications that can execute in parallel. Recurrence forces GPU cores to sit idle waiting for time-step t-1 to finish. Furthermore, despite gating mechanisms like cell states in LSTMs and reset gates in GRUs, recurrent networks still suffer from vanishing gradients over long horizons. If token 5 depends critically on token 2,000, passing that information through 1,995 non-linear recurrence steps leads to information degradation and catastrophic forgetting.
+
+[00:07:30] Prof. Evans: Enter Self-Attention. The core philosophical shift of the Transformer is: what if we discard recurrence entirely? What if every single token in an input sequence of length N can directly attend to every other token in O(1) sequential steps?
+
+Let us formalize how Attention works. At its heart, attention is an information retrieval mechanism. Imagine you are in a library or searching a database. You hold a Query vector. Every document or item in the library has a Key vector, and associated with each key is a Value vector.
+
+[00:09:55] Prof. Evans: In scaled dot-product attention, we project our input embedding matrix X of dimension (N x d_model) into three distinct spaces using learnable weight matrices:
+Q = X * W_Q (Queries)
+K = X * W_K (Keys)
+V = X * W_V (Values)
+
+To determine how much token i should attend to token j, we take the inner product of Query_i with Key_j: Q_i dot K_j. In matrix notation across the entire sequence, we compute the compatibility matrix: Attention_Scores = Q * K^T. This yields an (N x N) matrix of raw pairwise similarity scores.
+
+[00:12:45] Prof. Evans: But there is a crucial detail: why do we call it SCALED dot-product attention? Notice the division by the square root of d_k, where d_k is the dimension of the key vectors. Why is that scaling factor critical? Let's analyze the statistics. If components of Q and K are independent random variables with zero mean and unit variance, their dot product has a mean of zero and variance equal to d_k. For large dimensions like d_k = 64 or 128, the dot products grow very large in magnitude. When you feed large values into a Softmax function, what happens? The softmax output saturates, pushing probabilities close to 1 or 0, where the softmax gradients are virtually zero! That kills backpropagation. Dividing by sqrt(d_k) stabilizes the variance back to 1.0, preserving healthy gradient flow.
+
+Thus, the canonical equation is:
+Attention(Q, K, V) = softmax( (Q * K^T) / sqrt(d_k) ) * V
+
+[00:16:10] Prof. Evans: Now, I'd like Dr. Rostova to discuss Multi-Head Attention and Positional Encodings.
+
+[00:16:30] Dr. Rostova: Thank you, Professor Evans. Single-head attention has a severe limitation: it computes an average attention distribution. But words have multiple simultaneous syntactic and semantic relationships. For example, in the sentence "The animal didn't cross the street because it was too tired," the word "it" needs to attend to "animal" for coreference resolution, but it also needs to attend to "tired" to capture predicative context.
+
+Multi-Head Attention solves this by projecting Q, K, and V into h different lower-dimensional representation subspaces (typically h = 8 or 16). Each head computes its own scaled dot-product attention in parallel:
+head_i = Attention(Q * W_Q^i, K * W_K^i, V * W_V^i)
+
+Then we concatenate all h heads and project them back through a master linear projection matrix W_O:
+MultiHead(Q, K, V) = Concat(head_1, ..., head_h) * W_O.
+This allows the network to jointly attend to information from different representation subspaces at different positions.
+
+[00:20:45] Dr. Rostova: Now let's address an elephant in the room. Attention is permutation invariant! If you shuffle the words in a sentence into random order, the attention weights between any two words remain identical. But natural language is intrinsically order-dependent. "Dog bites man" is fundamentally different from "Man bites dog." 
+
+Because the Transformer has no recurrence and no convolution, positional information must be explicitly injected into the input embeddings. The original paper used sinusoidal positional encodings:
+PE(pos, 2i) = sin(pos / 10000^(2i / d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i / d_model))
+
+Why sinusoids? Because for any fixed offset k, PE(pos + k) can be represented as a linear function of PE(pos), making it easy for the model to learn relative positional relationships. In modern architectures like LLaMA and Mistral, researchers often use Rotary Position Embeddings (RoPE) or ALiBi, which rotate query and key vectors in complex space.
+
+[00:25:00] Prof. Evans: Thank you, Elena. To wrap up the encoder block: each layer consists of two sub-layers:
+1. Multi-Head Self-Attention
+2. Position-wise Feed-Forward Network (FFN), which consists of two linear transformations with a non-linearity such as ReLU, GELU, or SwiGLU in between: FFN(x) = max(0, xW_1 + b_1)W_2 + b_2.
+
+Around each sub-layer, we employ a residual skip connection followed by Layer Normalization: Output = LayerNorm(x + SubLayer(x)). Residual connections prevent vanishing gradients across deep stacks (e.g. 32 to 96 layers), while LayerNorm stabilizes activation distributions across features independently of batch size.
+
+[00:29:15] Prof. Evans: In conclusion, Transformers unlocked three historic breakthroughs:
+First, massive parallelization during training, enabling models to scale to billions and trillions of parameters.
+Second, constant O(1) path length between any two tokens in the sequence, solving long-range credit assignment.
+Third, inductive flexibility: by scaling compute and data, attention mechanisms learn rich, emergent representations of language, vision, and code.
+
+Next week, we will explore Decoder-only models, causal masking, and autoregressive text generation. See you all on Tuesday!
