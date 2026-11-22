@@ -65,11 +65,14 @@ class SummarizeTextRequest(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 async def serve_index(request: Request):
     """Serves the primary web application interface."""
-    return templates.TemplateResponse("index.html", {
-        "request": request,
-        "palette": COLOR_PALETTE,
-        "providers": SUPPORTED_PROVIDERS
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            "palette": COLOR_PALETTE,
+            "providers": SUPPORTED_PROVIDERS
+        }
+    )
 
 
 @app.get("/api/health")

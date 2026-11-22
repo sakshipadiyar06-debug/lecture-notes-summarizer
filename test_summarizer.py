@@ -98,6 +98,12 @@ class TestFastAPIEndpoints(unittest.TestCase):
     def setUpClass(cls):
         cls.client = TestClient(app)
 
+    def test_serve_index_html(self):
+        resp = self.client.get("/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("Automatic Lecture Notes", resp.text)
+        self.assertIn("Map-Reduce", resp.text)
+
     def test_health_check(self):
         resp = self.client.get("/api/health")
         self.assertEqual(resp.status_code, 200)
