@@ -1,128 +1,160 @@
-# 🎓 Automatic Lecture Notes Summarizer
+<div align="center">
 
-A high-performance Generative AI system that converts long university lecture transcripts and PDF textbooks into structured, concise, and high-yield bullet-point study notes using a scalable **Map-Reduce** hierarchical chunking architecture.
+# 🎓 AI Automatic Lecture Notes Summarizer
+### *Transforming Long Academic Lectures & PDF Textbooks into High-Yield Bullet-Point Study Guides*
+
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash%20%2F%20Pro-8E75C2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://ai.google.dev/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o%20%2F%20mini-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com/)
+[![Ollama](https://img.shields.io/badge/Ollama-Local%20LLMs-000000?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.ai/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-FC931F?style=for-the-badge)](LICENSE)
+
+<br/>
+
+[Key Features](#-key-features) •
+[UI/UX Color Theme](#-uiux-color-palette) •
+[System Architecture](#-system-architecture) •
+[Quickstart](#-quickstart) •
+[Web Application](#-interactive-web-application) •
+[CLI Usage](#-command-line-interface-cli) •
+[Testing](#-automated-testing)
+
+</div>
 
 ---
 
-## 🎨 UI/UX Color Palette Specification
+## 📖 Overview
 
-The web application is designed with the custom, high-contrast dark theme requested:
+Standard Large Language Models (LLMs) struggle with long lectures, seminar transcripts, and multi-page textbook chapters due to context degradation, hallucination over long sequences, and prompt size limits. 
 
-| Color Hex | Name | UI Component / Role |
-| :--- | :--- | :--- |
-| **`#FC931F`** | Warm Amber | Primary Action CTA Buttons, Glowing Badges, Header Highlights |
-| **`#F67608`** | Fiery Orange | Button Gradients, Chunk Badges, Active Progress Bar Accents |
-| **`#020C0F`** | Obsidian Base | Viewport Background, Terminal Blocks, Markdown Container |
-| **`#053A41`** | Deep Teal | Elevated Cards, Input Containers, Navigation Header Base |
-| **`#044F58`** | Border Teal | Panel Borders, Divider Lines, Drag-and-Drop Zone Borders |
-| **`#1C7C84`** | Muted Cyan | Secondary Controls, Metadata Counters, Subdued Labeling |
-| **`#2A9DA6`** | Bright Cyan | Active Tab Highlights, Progress Bar Glows, Hyperlinks |
+The **AI Automatic Lecture Notes Summarizer** solves this with a robust **hierarchical Map-Reduce pipeline**:
+1. **Intelligent Recursive Chunking**: Long documents and extracted PDFs are split into context-aware, overlapping semantic segments (paragraphs and sentences are never cut in half).
+2. **Map Stage**: Each segment is independently processed by an LLM to extract granular facts, technical terminology, and arguments.
+3. **Reduce Stage**: Segment notes are synthesized into a coherent master study guide that eliminates redundancies, groups ideas by conceptual themes, and generates active-recall self-test questions.
+4. **Multi-Engine Agnostic**: Works out-of-the-box with **Google Gemini**, **OpenAI**, **Local Ollama**, or the zero-setup **Offline Extractive Engine**.
 
 ---
 
-## 🌟 Key Architecture & Capabilities
+## 🎨 UI/UX Color Palette
+
+The user interface is engineered with a custom, high-tech dark theme adhering strictly to this palette:
+
+| Color Swatch | Hex Code | Role in UI/UX |
+| :---: | :---: | :--- |
+| ![#FC931F](https://via.placeholder.com/15/FC931F/000000?text=+) | **`#FC931F`** | **Warm Amber** &bull; Primary CTA Buttons (`✨ Generate Lecture Notes`), Glowing Titles, Key Takeaway Cards |
+| ![#F67608](https://via.placeholder.com/15/F67608/000000?text=+) | **`#F67608`** | **Fiery Orange** &bull; Button Gradients, Chunk Segment Badges, Active Progress Bar Accents |
+| ![#020C0F](https://via.placeholder.com/15/020C0F/000000?text=+) | **`#020C0F`** | **Obsidian Base** &bull; Viewport Background, Terminal Codeblocks, Markdown Reading Surface |
+| ![#053A41](https://via.placeholder.com/15/053A41/000000?text=+) | **`#053A41`** | **Deep Teal Surface** &bull; Elevated Cards, Form Containers, Header Navigation Gradient |
+| ![#044F58](https://via.placeholder.com/15/044F58/000000?text=+) | **`#044F58`** | **Border Teal** &bull; Panel Outlines, Subtle Dividers, Drag-and-Drop Zone Borders |
+| ![#1C7C84](https://via.placeholder.com/15/1C7C84/000000?text=+) | **`#1C7C84`** | **Muted Cyan** &bull; Secondary Action Buttons, Sliders, Metadata Counters (`chars`, `words`) |
+| ![#2A9DA6](https://via.placeholder.com/15/2A9DA6/000000?text=+) | **`#2A9DA6`** | **Bright Cyan Accent** &bull; Active Tab Indicators, Live Progress Bar Glow, Hyperlinks & Badges |
+
+---
+
+## ✨ Key Features
+
+- 📑 **Universal Ingestion**: Paste transcripts with speaker timestamps or drag-and-drop `.pdf`, `.txt`, and `.md` files.
+- 🧹 **Automated Text Sanitization**: Cleans PDF noise, merges hyphenated line-breaks (`trans-\nformer` &rarr; `transformer`), and removes repetitive page headers/footers.
+- 🧩 **Sliding-Window Chunker**: Preserves paragraph and sentence integrity with configurable overlap (50–1000 characters) to prevent lost thoughts between chunks.
+- ⚡ **Map-Reduce Parallelism**: Scales efficiently across arbitrarily long documents without hitting single-prompt context limits.
+- 🎓 **Structured Academic Output Format**:
+  - 📌 **Executive Summary**: 2–3 paragraph high-level thesis of the lecture.
+  - 🧠 **Thematic Modular Notes**: Deep conceptual breakdown with clear subheadings.
+  - 📖 **Terminology & Formulas Glossary**: Precise, contextual definitions.
+  - 💡 **High-Yield Takeaways**: Top exam-critical principles and rules of thumb.
+  - ❓ **Active Recall Questions**: Flashcard-style self-test questions with answers.
+- 🖥️ **Interactive Web Application**: Responsive single-page interface with real-time progress bars, metric cards, chunk inspection accordion, copy-to-clipboard, and print/PDF export.
+- 💻 **Complete CLI**: Headless command-line tool for terminal workflows and batch scripts.
+- 🔒 **Privacy & Local-First**: Run 100% locally with Ollama or the built-in Offline Engine without sending data to external APIs.
+
+---
+
+## 🏛️ System Architecture
 
 ```
-  ┌──────────────────────────────────────────────────────────────┐
-  │                   Input Lecture Document                     │
-  │     (Long Transcript / PDF / Textbook Chapter / Audio TXT)   │
-  └──────────────────────────────┬───────────────────────────────┘
-                                 │
-                 ┌───────────────▼───────────────┐
-                 │   Recursive Semantic Chunker  │
-                 │ (Sliding Window with Overlap) │
-                 └───────────────┬───────────────┘
-                                 │
-         ┌───────────────────────┼───────────────────────┐
-         ▼                       ▼                       ▼
-   ┌───────────┐           ┌───────────┐           ┌───────────┐
-   │  Chunk 1  │           │  Chunk 2  │           │  Chunk N  │
-   └─────┬─────┘           └─────┬─────┘           └─────┬─────┘
-         │                       │                       │
-         │ (MAP STAGE: Prompt per chunk)                 │
-         ▼                       ▼                       ▼
-   ┌───────────┐           ┌───────────┐           ┌───────────┐
-   │ Summary 1 │           │ Summary 2 │           │ Summary N │
-   └─────┬─────┘           └─────┬─────┘           └─────┬─────┘
-         │                       │                       │
-         └───────────────────────┼───────────────────────┘
-                                 │
-                 ┌───────────────▼───────────────┐
-                 │  REDUCE STAGE: Synthesis LLM  │
-                 │   (Global Redundancy Removal) │
-                 └───────────────┬───────────────┘
-                                 │
-                 ┌───────────────▼───────────────┐
-                 │  Structured Study Master Note │
-                 │  - Executive Summary          │
-                 │  - Thematic Bullet Points     │
-                 │  - Terminology Glossary       │
-                 │  - High-Yield Takeaways       │
-                 │  - Active Recall Questions    │
-                 └───────────────────────────────┘
+                                  ┌──────────────────────────────┐
+                                  │   Raw Lecture Input Source   │
+                                  │ (PDF / Transcript / Text)    │
+                                  └──────────────┬───────────────┘
+                                                 │
+                                  ┌──────────────▼───────────────┐
+                                  │    Document Sanitizer        │
+                                  │ • Linebreak hyphen repair    │
+                                  │ • Page number noise removal  │
+                                  └──────────────┬───────────────┘
+                                                 │
+                                  ┌──────────────▼───────────────┐
+                                  │   Recursive Semantic Chunker │
+                                  │  (Sliding Window + Overlap)  │
+                                  └──────────────┬───────────────┘
+                                                 │
+                   ┌─────────────────────────────┼─────────────────────────────┐
+                   ▼                             ▼                             ▼
+             ┌───────────┐                 ┌───────────┐                 ┌───────────┐
+             │  Chunk 1  │                 │  Chunk 2  │                 │  Chunk N  │
+             └─────┬─────┘                 └─────┬─────┘                 └─────┬─────┘
+                   │                             │                             │
+                   │ [MAP STAGE: Extract points, theories, terminology, steps] │
+                   ▼                             ▼                             ▼
+             ┌───────────┐                 ┌───────────┐                 ┌───────────┐
+             │ Summary 1 │                 │ Summary 2 │                 │ Summary N │
+             └─────┬─────┘                 └─────┬─────┘                 └─────┬─────┘
+                   │                             │                             │
+                   └─────────────────────────────┼─────────────────────────────┘
+                                                 │
+                                  ┌──────────────▼───────────────┐
+                                  │    REDUCE SYNTHESIS STAGE    │
+                                  │  • Eliminate redundancies    │
+                                  │  • Harmonize narrative arc   │
+                                  │  • Generate self-test Q&As   │
+                                  └──────────────┬───────────────┘
+                                                 │
+                                  ┌──────────────▼───────────────┐
+                                  │  Master Study Guide (Notes)  │
+                                  │  • Executive Summary         │
+                                  │  • Thematic Concept Modules  │
+                                  │  • Terminology Glossary      │
+                                  │  • Active Recall Q&A Cards   │
+                                  └──────────────────────────────┘
 ```
-
-1. **Smart Recursive Chunker**:
-   - Preserves paragraph transitions, sentence structures, and speaker tags.
-   - Configurable `chunk_size` (1,000 to 8,000 characters) and `chunk_overlap` (50 to 1,000 characters) to avoid context clipping across boundaries.
-
-2. **Hierarchical Map-Reduce Processing**:
-   - **Map Step**: Each chunk is analyzed independently to extract technical definitions, empirical arguments, and key points.
-   - **Reduce Step**: Combines all intermediate notes into a harmonized, formatted study guide.
-
-3. **Multi-Provider LLM Engine**:
-   - **Google Gemini**: `gemini-2.5-flash`, `gemini-1.5-pro` (via `google-genai` SDK or REST)
-   - **OpenAI**: `gpt-4o-mini`, `gpt-4o`, `gpt-3.5-turbo`
-   - **Ollama**: Local models (`llama3.2`, `mistral`, `qwen2.5`, `phi4`, `deepseek-r1`) with zero API costs
-   - **Offline Extractive Engine**: Local extractive graph-ranking summarizer for zero-setup offline demos.
-
-4. **Multi-Format Ingestion**:
-   - Directly paste long raw text / transcripts.
-   - Drag-and-drop or upload `.pdf`, `.txt`, and `.md` files.
-   - Automated cleaning: joins broken hyphenated linebreaks, strips repetitive page number footers, and normalizes spacing.
-
-5. **Export Options**:
-   - One-click copy Markdown to clipboard.
-   - Download `.md` file.
-   - Print or export to PDF directly from browser.
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Quickstart
 
-### 1. Requirements & Installation
+### 1. Clone & Install
 
 ```bash
-# Navigate to the project directory
-cd C:\Users\saksh\.gemini\antigravity\scratch\lecture_notes_summarizer
+git clone https://github.com/sakshipadiyar06-debug/lecture-notes-summarizer.git
+cd lecture-notes-summarizer
 
-# Install required dependencies
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Configure API Keys (Optional)
+### 2. Configure Environment (Optional)
 
-Copy `.env.example` to `.env` or set environment variables:
+Create a `.env` file (or set environment variables) if you wish to use cloud providers:
 
 ```bash
-# For OpenAI
-set OPENAI_API_KEY=sk-...
+# OpenAI (Optional)
+OPENAI_API_KEY=sk-...
 
-# For Google Gemini
-set GEMINI_API_KEY=AIzaSy...
+# Google Gemini (Optional)
+GEMINI_API_KEY=AIzaSy...
 
-# For Ollama (Local)
-# Just ensure Ollama is running:
-ollama run llama3.2
+# Local Ollama (Optional - default is http://localhost:11434)
+OLLAMA_BASE_URL=http://localhost:11434
 ```
 
-*(Note: If no API keys are provided, the built-in **Offline Engine** runs automatically!)*
+> **Note**: You don't need any API key to start! The built-in **Offline Engine** runs locally out-of-the-box.
 
 ---
 
-## 🖥️ Running the Interactive Web Application
+## 🖥️ Interactive Web Application
 
-Launch the FastAPI web server:
+Launch the local web server:
 
 ```bash
 python app.py
@@ -130,96 +162,114 @@ python app.py
 
 Then open your browser at **[http://localhost:8000](http://localhost:8000)**.
 
-### Features in the Web App:
-- **Sample Loader Buttons**: Click `🤖 ML Transformers` or `🧠 Synaptic Plasticity` to instantly load realistic 1,200+ word university lectures.
-- **PDF Upload**: Drag and drop any lecture slides or PDF paper (e.g. `sample_lectures/quantum_computing_lecture.pdf`).
-- **Interactive Tabs**:
-  - `Master Notes`: Rendered Markdown with executive summary, categorized bullets, definitions, and self-test questions.
-  - `Map Stage (Chunks)`: Expandable accordion to inspect each chunk and its individual segment summary.
-  - `Extracted Text`: View raw extracted content with word and character counters.
-- **Progress Tracking**: Real-time progress bar with live stage indicators.
+### Web UI Features:
+- **Two Input Modes**: Toggle between **Paste Transcript** and **Upload PDF / File**.
+- **1-Click Sample Demos**: Load realistic university lectures with one click:
+  - `🤖 ML Transformers` (1,150-word lecture on Self-Attention and Vaswani et al.)
+  - `🧠 Synaptic Plasticity` (950-word neurobiology lecture on LTP and NMDA receptors)
+- **Live Progress Tracking**: Watch real-time stage transitions from chunking &rarr; map summarization &rarr; reduce synthesis.
+- **Three-Way Output Viewer**:
+  - `🎓 Master Notes`: Rendered study guide with executive summary, bullets, and quiz questions.
+  - `🧩 Map Stage (Chunks)`: Expandable accordion showing individual chunk context and segment summaries.
+  - `📄 Extracted Text`: Cleaned text extracted from the source document.
+- **Export Toolbar**: `📋 Copy Markdown`, `💾 Save .md`, and `🖨️ Print / Save to PDF`.
 
 ---
 
-## 💻 Running via Command Line (CLI)
+## 💻 Command Line Interface (CLI)
 
-The CLI script `cli.py` allows command-line batch processing and terminal usage:
+The CLI tool allows quick batch processing directly in your terminal:
 
 ```bash
-# 1. Quick run on built-in sample lecture
+# 1. Quick run on built-in sample lecture with offline engine
 python cli.py --show-chunks
 
-# 2. Summarize a PDF file
+# 2. Summarize a PDF file and save output to markdown
 python cli.py --input sample_lectures/quantum_computing_lecture.pdf --output notes.md
 
-# 3. Use Google Gemini
-python cli.py --input sample_lectures/machine_learning_transformers_lecture.txt --provider gemini --model gemini-2.5-flash
+# 3. Summarize using Google Gemini
+python cli.py --input lecture.txt --provider gemini --model gemini-2.5-flash
 
-# 4. Use OpenAI GPT-4o-mini
+# 4. Summarize using OpenAI GPT-4o-mini
 python cli.py --input lecture.pdf --provider openai --model gpt-4o-mini --api-key sk-...
 
-# 5. Use Ollama with local LLaMA-3.2
+# 5. Summarize using local Ollama (LLaMA-3.2)
 python cli.py --input lecture.txt --provider ollama --model llama3.2 --chunk-size 2500
 ```
 
-### CLI Arguments:
+### CLI Options:
 
-| Argument | Description | Default |
+| Flag | Description | Default |
 | :--- | :--- | :--- |
-| `--input, -i` | Path to `.pdf`, `.txt`, or `.md` lecture file | Sample ML lecture |
-| `--text, -t` | Raw transcript passed directly as text string | None |
-| `--provider, -p` | LLM backend: `offline`, `gemini`, `openai`, `ollama` | `offline` |
+| `--input, -i` | Path to `.pdf`, `.txt`, or `.md` file | Built-in sample |
+| `--text, -t` | Raw transcript passed as inline text | `None` |
+| `--provider, -p` | LLM backend: `gemini`, `openai`, `ollama`, `offline` | `offline` |
 | `--model, -m` | Model name override | Provider default |
 | `--api-key` | API key override | Read from environment |
-| `--chunk-size, -c` | Character size per chunk | `3200` |
-| `--chunk-overlap, -o` | Overlap between consecutive chunks | `350` |
-| `--output, -out` | Path to save output Markdown file | None (stdout) |
-| `--show-chunks` | Print intermediate chunk summaries | False |
+| `--chunk-size, -c` | Character size per chunk window | `3200` |
+| `--chunk-overlap, -o` | Overlap character count between chunks | `350` |
+| `--output, -out` | Path to save output Markdown file | `None` (prints to stdout) |
+| `--show-chunks` | Show intermediate chunk notes (Map Stage) | `False` |
 
 ---
 
-## 🧪 Automated Test Suite
+## 🧪 Automated Testing
 
-Run the comprehensive unit and integration test suite:
+The project includes an automated test suite verifying extraction, chunking, providers, and REST endpoints:
 
 ```bash
 python test_summarizer.py
 ```
 
-### Verified Test Cases:
-- `test_clean_text_hyphenation`: Validates joining words split across lines.
-- `test_clean_text_page_numbers`: Validates stripping header/footer noise.
-- `test_single_small_chunk` & `test_multi_chunk_split_with_overlap`: Validates recursive split logic.
-- `test_offline_engine_map_and_reduce`: Validates Map-Reduce pipeline synthesis.
-- `test_health_check` & `test_get_providers`: Validates REST endpoints.
-- `test_summarize_file_upload_pdf`: Validates end-to-end PDF file upload and extraction.
+```
+............
+----------------------------------------------------------------------
+Ran 12 tests in 1.14s
+
+OK
+```
+
+### Test Coverage:
+- Text sanitization, line-break hyphen repair, and page header removal
+- Edge cases in recursive splitting (single small chunks, oversized text, empty text)
+- Map-Reduce execution in offline mode
+- REST API endpoints (`/api/health`, `/api/providers`, `/api/samples`)
+- Multi-part file upload with real PDF document extraction (`/api/summarize-file`)
 
 ---
 
-## 📂 Project Structure
+## 📁 Repository Structure
 
 ```
-lecture_notes_summarizer/
-├── app.py                      # FastAPI web server and REST API
-├── cli.py                      # Command line interface
-├── config.py                   # Settings, color palette, and prompt templates
-├── chunker.py                  # Recursive sentence/paragraph chunker
-├── pdf_extractor.py            # PDF and transcript text extraction engine
-├── llm_client.py               # Unified multi-provider LLM client
+lecture-notes-summarizer/
+├── app.py                      # FastAPI server & REST API
+├── cli.py                      # Command Line Interface (CLI)
+├── config.py                   # System prompts, defaults, and color palette
+├── chunker.py                  # Recursive paragraph/sentence text chunker
+├── pdf_extractor.py            # PDF & text extraction and sanitization engine
+├── llm_client.py               # Multi-provider LLM interface (Gemini, OpenAI, Ollama, Offline)
 ├── summarizer.py               # Hierarchical Map-Reduce summarization pipeline
-├── test_summarizer.py          # Unit & integration test suite (12 tests)
-├── create_sample_pdf.py        # Generates test lecture PDFs using ReportLab
+├── test_summarizer.py          # Unit and integration test suite
+├── create_sample_pdf.py        # ReportLab script generating sample test PDFs
 ├── requirements.txt            # Python dependencies
-├── .env.example                # Environment variables template
+├── .env.example                # Template for API keys
+├── .gitignore                  # Git ignore rules
+├── README.md                   # Project documentation
 ├── static/
 │   ├── css/
-│   │   └── styles.css          # Styled strictly with requested color palette
+│   │   └── styles.css          # Styled strictly with custom hex color palette
 │   └── js/
-│       └── app.js              # Drag-and-drop, real-time progress, markdown parsing
+│       └── app.js              # Real-time progress, drag-and-drop, markdown rendering
 ├── templates/
-│   └── index.html              # Modern, responsive single-page application
+│   └── index.html              # Responsive single-page web UI
 └── sample_lectures/
     ├── machine_learning_transformers_lecture.txt
     ├── neurobiology_synaptic_plasticity_lecture.txt
     └── quantum_computing_lecture.pdf
 ```
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — feel free to use, modify, and distribute it for academic or commercial purposes.
